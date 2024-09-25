@@ -10,17 +10,20 @@ public class CameraController : MonoBehaviour
 
 	[SerializeField] [Range(0.0f, 1.0f)] private float CameraHeight = 0.75f;
 
+	
+	
 #if UNITY_EDITOR
 	private void OnValidate()
 	{
 		// NULL Checks
-		if (_Camera == null)
+		if (_Camera == null || CameraParent == null)
 		{
-			foreach (GameObject Child in transform)
+			foreach (Transform Child in transform)
 			{
-				if (_Camera = Child.GetComponent<Camera>())
+				if (Child.GetComponent<Camera>())
 				{
-					CameraParent = Child;
+					_Camera = Child.GetComponent<Camera>();
+					CameraParent = Child.gameObject;
 					break;
 				}
 			}
@@ -28,8 +31,7 @@ public class CameraController : MonoBehaviour
 			// We still didn't find a camera!
 			if (_Camera == null)
 			{
-				CameraParent = Instantiate(new GameObject());
-				CameraParent.transform.SetParent(transform);
+				CameraParent = Instantiate(new GameObject(), transform, false);
 				CameraParent.transform.localPosition += new Vector3(0.0f, CameraHeight, 0.0f);
 				_Camera = CameraParent.AddComponent<Camera>();
 			}
@@ -56,8 +58,7 @@ public class CameraController : MonoBehaviour
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
-	{
-	}
+	{}
 
 	// Update is called once per frame
 	void Update()
