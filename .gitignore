@@ -14,3 +14,5 @@ Saved/*
 
 # Plugins
 Plugins/*/Intermediate
+
+Binaries/*/*.patch_[0-9].*
